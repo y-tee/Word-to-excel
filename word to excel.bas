@@ -2,20 +2,33 @@ Attribute VB_Name = "Module1"
 Sub importtabledatawork()
 Dim WdApp As Object, wddoc As Object
 Dim strDocName As String
+
 On Error Resume Next
 Set WdApp = GetObject(, “Word.Application”)
 If Err.Number = 429 Then
-Err.Clear
-Set WdApp = CreateObject(“Word.Application”)
+    Err.Clear
+    Set WdApp = CreateObject(“Word.Application”)
 End If
+
 WdApp.Visible = True
-strDocName = "C:\Users\ytdon\Desktop\lala.docx"
+With Application.FileDialog(msoFileDialogFilePicker)
+        'Makes sure the user can select only one file
+    .AllowMultiSelect = False
+        'Filter to just the following types of files to narrow down selection options
+        'Show the dialog box
+    .Show
+        
+        'Store in fullpath variable
+    strDocName = .SelectedItems.Item(1)
+End With
+
+
 If Dir(strDocName) = "" Then
-MsgBox "The file" & strDocName & vbCrLf & _
-"was not found in the folder path" & vbCrLf & _
-"C:\our-inventory\.", _
-vbExclamation, _
-"Sorry, that document name does not exist."
+    MsgBox "The file" & strDocName & vbCrLf & _
+    "was not found in the folder path" & vbCrLf & _
+    "C:\our-inventory\.", _
+    vbExclamation, _
+    "Sorry, that document name does not exist."
 Exit Sub
 End If
 

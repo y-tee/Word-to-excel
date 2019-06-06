@@ -4,17 +4,16 @@ Dim WdApp As Object, wddoc As Object
 Dim strDocName As String
 
 On Error Resume Next
-Set WdApp = GetObject(, ìWord.Applicationî)
+Set WdApp = GetObject(, ‚ÄúWord.Application‚Äù)
 If Err.Number = 429 Then
     Err.Clear
-    Set WdApp = CreateObject(ìWord.Applicationî)
+    Set WdApp = CreateObject(‚ÄúWord.Application‚Äù)
 End If
 
 WdApp.Visible = True
 With Application.FileDialog(msoFileDialogFilePicker)
         'Makes sure the user can select only one file
     .AllowMultiSelect = False
-        'Filter to just the following types of files to narrow down selection options
         'Show the dialog box
     .Show
         
@@ -45,24 +44,24 @@ x = 1
 y = 1
 
 With wddoc
-Tble = wddoc.Tables.Count
-If Tble = 0 Then
-MsgBox "No Tables found in the Word document", vbExclamation, "No Tables to Import"
-Exit Sub
-End If
+    Tble = wddoc.Tables.Count
+        If Tble = 0 Then
+            MsgBox "No Tables found in the Word document", vbExclamation, "No Tables to Import"
+            Exit Sub
+        End If
 
-For i = 1 To Tble
-With .Tables(i)
-    For rowWd = 1 To .Rows.Count
-    For colWd = 1 To .Columns.Count
-    Cells(x, y) = WorksheetFunction.Clean(.cell(rowWd, colWd).Range.Text)
-    y = y + 1
-    Next colWd
-    y = 1
-    x = x + 1
-    Next rowWd
-    End With
-    Next
+    For i = 1 To Tble
+        With .Tables(i)
+            For rowWd = 1 To .Rows.Count
+            For colWd = 1 To .Columns.Count
+            Cells(x, y) = WorksheetFunction.Clean(.cell(rowWd, colWd).Range.Text)
+            y = y + 1
+            Next colWd
+            y = 1
+            x = x + 1
+            Next rowWd
+        End With
+        Next
 End With
 
 wddoc.Close Savechanges:=False
